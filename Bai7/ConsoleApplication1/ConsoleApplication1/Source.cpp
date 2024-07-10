@@ -1,140 +1,139 @@
+﻿// 2001200628_NguyenThanhTien
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <stdbool.h>
+#include <conio.h>
 
-bool laSoChinhPhuong(int n) {
-	double canBacHai = sqrt((double)n); 
-	return (canBacHai == (int)canBacHai);
-}
-
-void timMax(int *arr, int kichThuoc, int **phanTuMax) {
-	*phanTuMax = arr;
-	for (int i = 1; i < kichThuoc; i++) {
-		if (*(arr + i) > **phanTuMax) {
-			*phanTuMax = (arr + i);
-		}
+void nhapM1C_SoNguyen(int* &a, int &n) {
+	n = 10;
+	a = (int*)malloc(n * sizeof(int)); // Cấp phát a có 10 phần tử
+	for (int i = 0; i < n; i++) {
+		*(a + i) = rand() % 100;
 	}
 }
 
-void timChanLe(int *arr, int kichThuoc, int **phanTuChanMax, int **phanTuLeMin) {
-	*phanTuChanMax = NULL;
-	*phanTuLeMin = NULL;
+void xuatM1C_SoNguyen(int* a, int n) {
+	for (int i = 0; i < n; i++) {
+		printf("Phan tu thu %d co gia tri %d va dia chi o nho la %p\n", i, *(a + i), (a + i));
+		printf("Phan tu thu %d co gia tri %d va dia chi o nho la %p\n", i, a[i], (a + i));
+	}
+}
 
-	for (int i = 0; i < kichThuoc; i++) {
-		if (*(arr + i) % 2 == 0) {
-			if (*phanTuChanMax == NULL || *(arr + i) > **phanTuChanMax) {
-				*phanTuChanMax = (arr + i);
+void timPhanTuLonNhat(int* a, int n) {
+	int* max = a;
+	for (int i = 1; i < n; i++) {
+		if (*(a + i) > *max) {
+			max = a + i;
+		}
+	}
+	printf("Phan tu lon nhat la %d tai dia chi %p\n", *max, max);
+}
+
+void timChanLeLonNhoNhat(int* a, int n) {
+	int* chanMax = NULL;
+	int* leMin = NULL;
+
+	for (int i = 0; i < n; i++) {
+		if (*(a + i) % 2 == 0) {
+			if (chanMax == NULL || *(a + i) > *chanMax) {
+				chanMax = a + i;
 			}
 		}
 		else {
-			if (*phanTuLeMin == NULL || *(arr + i) < **phanTuLeMin) {
-				*phanTuLeMin = (arr + i);
+			if (leMin == NULL || *(a + i) < *leMin) {
+				leMin = a + i;
 			}
 		}
 	}
+
+	if (chanMax) {
+		printf("Phan tu chan lon nhat tai dia chi %p\n", chanMax);
+	}
+	else {
+		printf("Khong co phan tu chan trong mang.\n");
+	}
+
+	if (leMin) {
+		printf("Phan tu le nho nhat tai dia chi %p\n", leMin);
+	}
+	else {
+		printf("Khong co phan tu le trong mang.\n");
+	}
 }
 
-void xoaPhanTuKhong(int **arr, int *kichThuoc) {
-	int *mangMoi = (int*)malloc(*kichThuoc * sizeof(int));
-	int kichThuocMoi = 0;
-
-	for (int i = 0; i < *kichThuoc; i++) {
-		if (*(*arr + i) != 0) {
-			mangMoi[kichThuocMoi++] = *(*arr + i);
+void xoaPhanTuKhong(int* &a, int &n) {
+	int newSize = 0;
+	for (int i = 0; i < n; i++) {
+		if (*(a + i) != 0) {
+			*(a + newSize) = *(a + i);
+			newSize++;
 		}
 	}
-
-	*arr = (int*)realloc(*arr, kichThuocMoi * sizeof(int));
-	for (int i = 0; i < kichThuocMoi; i++) {
-		*(*arr + i) = mangMoi[i];
-	}
-	*kichThuoc = kichThuocMoi;
-
-	free(mangMoi);
+	n = newSize;
+	a = (int*)realloc(a, n * sizeof(int));
 }
 
-void themPhanTu(int **arr, int *kichThuoc, int x) {
-	*arr = (int*)realloc(*arr, (*kichThuoc + 1) * sizeof(int));
-
-	for (int i = *kichThuoc; i > 0; i--) {
-		*(*arr + i) = *(*arr + i - 1);
+void themPhanTuSauDauTien(int* &a, int &n, int x) {
+	a = (int*)realloc(a, (n + 1) * sizeof(int));
+	for (int i = n; i > 1; i--) {
+		*(a + i) = *(a + i - 1);
 	}
-	*(*arr + 1) = x;
-	(*kichThuoc)++;
+	*(a + 1) = x;
+	n++;
 }
 
-int tongSoChinhPhuong(int *arr, int kichThuoc) {
+bool laSoChinhPhuong(int n) {
+	int sqrt_n = (int)sqrt((double)n);
+	return sqrt_n * sqrt_n == n;
+}
+
+int tongSoChinhPhuong(int* a, int n) {
 	int tong = 0;
-	for (int i = 0; i < kichThuoc; i++) {
-		if (laSoChinhPhuong(*(arr + i))) {
-			tong += *(arr + i);
+	for (int i = 0; i < n; i++) {
+		if (laSoChinhPhuong(*(a + i))) {
+			tong += *(a + i);
 		}
 	}
 	return tong;
 }
 
-void timCucDai(int *arr, int kichThuoc) {
-	for (int i = 0; i < kichThuoc; i++) {
-		if ((i == 0 && *(arr + i) > *(arr + i + 1)) ||
-			(i == kichThuoc - 1 && *(arr + i) > *(arr + i - 1)) ||
-			(i > 0 && i < kichThuoc - 1 && *(arr + i) > *(arr + i - 1) && *(arr + i) > *(arr + i + 1))) {
-			printf("Cuc dai: %d tai dia chi %p\n", *(arr + i), (arr + i));
+void xuatCucDai(int* a, int n) {
+	for (int i = 0; i < n; i++) {
+		if ((i == 0 && *(a + i) > *(a + i + 1)) ||
+			(i == n - 1 && *(a + i) > *(a + i - 1)) ||
+			(i > 0 && i < n - 1 && *(a + i) > *(a + i - 1) && *(a + i) > *(a + i + 1))) {
+			printf("Cuc dai: %d tai dia chi %p\n", *(a + i), (a + i));
 		}
 	}
 }
 
 int main() {
-	int kichThuoc = 10;
-	int *arr = (int*)malloc(kichThuoc * sizeof(int));
+	int* a;
+	int n = 0;
 
-	int giaTri[] = { 1, 3, 4, 5, 0, 16, 9, 0, 2, 4 };
-	for (int i = 0; i < kichThuoc; i++) {
-		arr[i] = giaTri[i];
-	}
+	nhapM1C_SoNguyen(a, n);
+	xuatM1C_SoNguyen(a, n);
 
-	int *phanTuMax;
-	timMax(arr, kichThuoc, &phanTuMax);
-	printf("Phan tu lon nhat: %d tai dia chi %p\n", *phanTuMax, phanTuMax);
+	timPhanTuLonNhat(a, n);
+	timChanLeLonNhoNhat(a, n);
 
-	int *phanTuChanMax, *phanTuLeMin;
-	timChanLe(arr, kichThuoc, &phanTuChanMax, &phanTuLeMin);
-	if (phanTuChanMax != NULL) {
-		printf("Phan tu chan lon nhat tai dia chi %p\n", phanTuChanMax);
-	}
-	else {
-		printf("Khong co phan tu chan trong mang.\n");
-	}
-	if (phanTuLeMin != NULL) {
-		printf("Phan tu le nho nhat tai dia chi %p\n", phanTuLeMin);
-	}
-	else {
-		printf("Khong co phan tu le trong mang.\n");
-	}
-
-	xoaPhanTuKhong(&arr, &kichThuoc);
+	xoaPhanTuKhong(a, n);
 	printf("Mang sau khi xoa cac phan tu 0:\n");
-	for (int i = 0; i < kichThuoc; i++) {
-		printf("%d ", arr[i]);
-	}
-	printf("\n");
+	xuatM1C_SoNguyen(a, n);
 
-	themPhanTu(&arr, &kichThuoc, 7);
+	themPhanTuSauDauTien(a, n, 7);
 	printf("Mang sau khi them 7 sau phan tu dau tien:\n");
-	for (int i = 0; i < kichThuoc; i++) {
-		printf("%d ", arr[i]);
-	}
-	printf("\n");
+	xuatM1C_SoNguyen(a, n);
 
-	int tong = tongSoChinhPhuong(arr, kichThuoc);
+	int tong = tongSoChinhPhuong(a, n);
 	printf("Tong cac phan tu la so chinh phuong: %d\n", tong);
 
-	timCucDai(arr, kichThuoc);
+	xuatCucDai(a, n);
 
-	free(arr);
+	free(a);
 
 	printf("Nhan phim bat ky de ket thuc chuong trinh...");
-	getchar(); 
 	getchar(); 
 	return 0;
 }
