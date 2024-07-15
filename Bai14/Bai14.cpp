@@ -36,17 +36,27 @@ int kiemTraNgoaiLe(NguoiLaoDong nguoi, int namHienTai) {
     return 0;
 }
 
-void tinhThoiGianNghiHuu(NguoiLaoDong nguoi, int namHienTai) {
-    int tuoi = tinhTuoi(nguoi.ngaySinh, namHienTai);
-    int namNghiHuu = nguoi.ngaySinh.year;
+void tinhThoiGianNghiHuu(NguoiLaoDong nguoi) {
+    int tuoiNghiHuu = 0;
 
     if (strcmp(nguoi.gioiTinh, "nam") == 0) {
-        namNghiHuu += 62;
+        if (nguoi.ngaySinh.year >= 1961 && nguoi.ngaySinh.year <= 1963) tuoiNghiHuu = 62;
+        else if (nguoi.ngaySinh.year == 1964) tuoiNghiHuu = 61 + 3 / 12;
+        else if (nguoi.ngaySinh.year == 1965) tuoiNghiHuu = 61 + 6 / 12;
+        else if (nguoi.ngaySinh.year == 1966) tuoiNghiHuu = 61 + 9 / 12;
+        else if (nguoi.ngaySinh.year >= 1967) tuoiNghiHuu = 62;
     }
     else if (strcmp(nguoi.gioiTinh, "nu") == 0) {
-        namNghiHuu += 60;
+        if (nguoi.ngaySinh.year >= 1966 && nguoi.ngaySinh.year <= 1970) tuoiNghiHuu = 60;
+        else if (nguoi.ngaySinh.year == 1971) tuoiNghiHuu = 58 + 4 / 12;
+        else if (nguoi.ngaySinh.year == 1972) tuoiNghiHuu = 58 + 8 / 12;
+        else if (nguoi.ngaySinh.year == 1973) tuoiNghiHuu = 59;
+        else if (nguoi.ngaySinh.year == 1974) tuoiNghiHuu = 59 + 4 / 12;
+        else if (nguoi.ngaySinh.year == 1975) tuoiNghiHuu = 59 + 8 / 12;
+        else if (nguoi.ngaySinh.year >= 1976) tuoiNghiHuu = 60;
     }
 
+    int namNghiHuu = nguoi.ngaySinh.year + tuoiNghiHuu;
     printf("%s se nghi huu vao nam %d\n", nguoi.hoTen, namNghiHuu);
 }
 
@@ -82,7 +92,7 @@ int main() {
         return 1;
     }
 
-    tinhThoiGianNghiHuu(nguoi, namHienTai);
+    tinhThoiGianNghiHuu(nguoi);
 
     return 0;
 }
