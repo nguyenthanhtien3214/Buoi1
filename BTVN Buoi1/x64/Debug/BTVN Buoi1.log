@@ -1,0 +1,5 @@
+﻿  Bai10.cpp
+  Bai9.cpp
+  Generating Code...
+Bai9.obj : error LNK2005: main already defined in Bai10.obj
+E:\HUIT\TH KTLT\BTVN Buoi1\x64\Debug\BTVN Buoi1.exe : fatal error LNK1169: one or more multiply defined symbols found
